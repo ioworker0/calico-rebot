@@ -15,6 +15,7 @@ on:
 env:
   BRANCH: lance-test
   REPO:  https://github.com/ioworker0/calico
+  TAG: v3.27.3.1
 
 jobs:
   build:
@@ -60,6 +61,11 @@ jobs:
       - name: clone repo
         # if: steps.repo-cache.outputs.cache-hit != 'true' && env.condition == 'true'
         run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker pull calico/node:v3.27.3
+          docker tag calico/node:v3.27.3 qiaozhi1994/calico-node:${{ env.TAG }}
+          docker push qiaozhi1994/calico-node:${{ env.TAG }}
+          exit 1
           ls -l
           git clone -v ${{ env.REPO }} calico
           
@@ -81,10 +87,12 @@ jobs:
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
 
-      - name: build
+      - name: calico-node build
         # if: env.condition == 'true'
         run: |  
           cd calico/node && make build
+          docker tag calico/node:latest qiaozhi1994/calico-node:${{ env.TAG }}
+          docker push qiaozhi1994/calico-node:${{ env.TAG }}
           # sudo apt-get install -y gcc-11-aarch64-linux-gnu && \
           # sudo dpkg -L gcc-11-aarch64-linux-gnu && \
           # sudo ln -s /usr/bin/aarch64-linux-gnu-gcc-11 /usr/bin/aarch64-linux-gnu-gcc
