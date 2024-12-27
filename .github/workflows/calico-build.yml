@@ -9,7 +9,7 @@ on:
 env:
   BRANCH: v3.27.3.dump
   REPO:  https://github.com/ioworker0/calico
-  TAG: v3.27.3.dump
+  TAG: v3.27.3.dump.test
 
 jobs:
   build:
