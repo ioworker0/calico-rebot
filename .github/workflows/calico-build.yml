@@ -50,15 +50,15 @@ jobs:
       #       echo "condition=true" >> $GITHUB_ENV
       #     fi
           
-      - uses: actions/cache@v4
-        if: env.condition == 'true'
-        id: repo-cache
-        with:
-          path: .
-          key: calico
+      # - uses: actions/cache@v4
+      #   if: env.condition == 'true'
+      #   id: repo-cache
+      #   with:
+      #     path: .
+      #     key: calico
     
       - name: clone repo
-        if: steps.repo-cache.outputs.cache-hit != 'true' && env.condition == 'true'
+        # if: steps.repo-cache.outputs.cache-hit != 'true' && env.condition == 'true'
         run: |
           ls -l
           git clone -v ${{ env.REPO }} calico
@@ -77,12 +77,12 @@ jobs:
       #     rm -rf .config*
           
       - name: pull branch
-        if: env.condition == 'true'
+        # if: env.condition == 'true'
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }} && git pull
 
       - name: build
-        if: env.condition == 'true'
+        # if: env.condition == 'true'
         run: |  
           cd calico && make -C node image
           # sudo apt-get install -y gcc-11-aarch64-linux-gnu && \
