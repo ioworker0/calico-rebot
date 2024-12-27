@@ -79,7 +79,7 @@ jobs:
       - name: pull branch
         # if: env.condition == 'true'
         run: |
-          cd calico && git pull && git checkout ${{ env.BRANCH }} && git pull
+          cd calico && git pull && git checkout ${{ env.BRANCH }}
 
       - name: build
         # if: env.condition == 'true'
