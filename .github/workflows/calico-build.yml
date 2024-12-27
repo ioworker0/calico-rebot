@@ -60,6 +60,7 @@ jobs:
       - name: clone repo
         # if: steps.repo-cache.outputs.cache-hit != 'true' && env.condition == 'true'
         run: |
+          cat /etc/resolv.conf
           curl --dns-servers 8.8.8.8 -i http://mirrorlist.centos.org/?release=8-stream&arch=x86_64&repo=AppStream&infra=container
           curl -i http://mirrorlist.centos.org/?release=8-stream&arch=x86_64&repo=AppStream&infra=container 
           ls -l
