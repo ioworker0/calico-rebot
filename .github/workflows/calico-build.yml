@@ -16,8 +16,6 @@ env:
   BRANCH: lance-test
   REPO:  https://github.com/ioworker0/calico
   TAG: v3.27.3.1
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
   build:
