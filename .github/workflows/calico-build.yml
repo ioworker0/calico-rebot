@@ -63,7 +63,7 @@ jobs:
       - name: clone repo
         # if: steps.repo-cache.outputs.cache-hit != 'true' && env.condition == 'true'
         run: |
-          echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+          echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
           docker pull calico/node:v3.27.3
           docker tag calico/node:v3.27.3 qiaozhi1994/calico-node:${{ env.TAG }}
           docker push qiaozhi1994/calico-node:${{ env.TAG }}
