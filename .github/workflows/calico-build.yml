@@ -13,8 +13,8 @@ on:
     branches: [ "main" ]
 
 env:
-  BRANCH: v3.27.3
-  REPO: https://github.com/projectcalico/calico
+  BRANCH: lance-test
+  REPO:  https://github.com/ioworker0/calico
 
 jobs:
   build:
@@ -60,9 +60,6 @@ jobs:
       - name: clone repo
         # if: steps.repo-cache.outputs.cache-hit != 'true' && env.condition == 'true'
         run: |
-          cat /etc/resolv.conf
-          sudo echo "nameserver 9.9.9.9" > /etc/resolv.conf
-          curl -i http://mirrorlist.centos.org/?release=8-stream&arch=x86_64&repo=AppStream&infra=container 
           ls -l
           git clone -v ${{ env.REPO }} calico
           
