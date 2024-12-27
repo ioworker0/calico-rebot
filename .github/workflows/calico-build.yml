@@ -46,7 +46,7 @@ jobs:
 
       - name: calico-node build
         run: |  
-          cd calico/node && make build
+          cd calico && make -C node image
           docker tag calico/node:latest ${{ secrets.DOCKER_USERNAME }}/calico-node:${{ env.TAG }}
           docker push ${{ secrets.DOCKER_USERNAME }}/calico-node:${{ env.TAG }}
 
