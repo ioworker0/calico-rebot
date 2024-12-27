@@ -84,7 +84,7 @@ jobs:
       - name: build
         # if: env.condition == 'true'
         run: |  
-          cd calico && make -C node image
+          cd calico/node && make build
           # sudo apt-get install -y gcc-11-aarch64-linux-gnu && \
           # sudo dpkg -L gcc-11-aarch64-linux-gnu && \
           # sudo ln -s /usr/bin/aarch64-linux-gnu-gcc-11 /usr/bin/aarch64-linux-gnu-gcc
