@@ -21,6 +21,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    environment: 
+      name: Dockerhub
+
     permissions:
       contents: write
 
