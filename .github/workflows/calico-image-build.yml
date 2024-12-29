@@ -8,14 +8,15 @@ env:
   BRANCH: v3.27.3.dump
   REPO:  https://github.com/ioworker0/calico
   TAG: v3.27.3.dump
-  IMAGE: kube-controllers
+  IMAGE: app-policy
 
   # pod2daemon: calico/node-driver-registrar:latest
   # node: calico/node:latest
   # calicoctl: calico/ctl:latest
   # cni-plugin: calico/cni:latest
   # apiserver: calico/apiserver:latest
-  # kube-controllers: 
+  # kube-controllers: calico/kube-controllers:latest
+  # app-policy:
 
 jobs:
   build:
