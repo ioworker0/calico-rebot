@@ -69,6 +69,6 @@ jobs:
            -d "{
                  \"msgtype\": \"text\",
                  \"text\": {
-                   \"content\": \"calico-${{ env.CIMAGE }} 已经编译完成 (分支: ${{ env.BRANCH }}, 标签: ${{ env.TAG }})\"
+                   \"content\": \"calico-${{ env.CIMAGE }} 已经编译完成 (分支: ${{ env.BRANCH }}, 标签: ${{ env.TAG }}), docker push ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }}\"
                  }
                }"
