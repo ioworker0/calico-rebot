@@ -1,0 +1,64 @@
+name: CALICO-IMAGE-BUILD
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  BRANCH: v3.27.3.dump
+  REPO:  https://github.com/ioworker0/calico
+  TAG: v3.27.3.dump
+  IMAGE: pod2daemon
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    environment: 
+      name: Dockerhub
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: robot
+
+      - name: system resources
+        run: |      
+          uname -r && uname -m && echo $(nproc) && free -h && docker -v
+
+      - name: login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          
+      - name: clone repo
+        run: |
+          git clone -v ${{ env.REPO }} calico
+                    
+      - name: pull branch
+        run: |
+          cd calico && git pull && git checkout ${{ env.BRANCH }}
+
+      - name: calico-${{ env.IMAGE }} build
+        run: |  
+          cd calico && make -C ${{ env.IMAGE }} image
+
+      # - name: push calico-${{ env.IMAGE }}
+      #   run: |  
+      #     docker tag calico/${{ env.IMAGE }}:latest ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.IMAGE }}:${{ env.TAG }}
+      #     docker push ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.IMAGE }}:${{ env.TAG }}
+
+      - name: done
+        run: |  
+          curl -X POST 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=73213bb8-b3eb-43f0-9493-7218b5f2eca6' \
+           -H 'Content-Type: application/json' \
+           -d "{
+                 \"msgtype\": \"text\",
+                 \"text\": {
+                   \"content\": \"calico-${{ env.IMAGE }} 已经编译完成 (分支: ${{ env.BRANCH }}, 标签: ${{ env.TAG }})\"
+                 }
+               }"
