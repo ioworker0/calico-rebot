@@ -8,11 +8,12 @@ env:
   BRANCH: v3.27.3.dump
   REPO:  https://github.com/ioworker0/calico
   TAG: v3.27.3.dump
-  IMAGE: calicoctl
+  IMAGE: cni-plugin
 
   # pod2daemon: calico/node-driver-registrar:latest
   # node: calico/node:latest
-  # calicoctl: 
+  # calicoctl: calico/ctl:latest
+  # cni-plugin: 
 
 jobs:
   build:
