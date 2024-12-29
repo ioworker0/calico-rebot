@@ -8,7 +8,8 @@ env:
   BRANCH: v3.27.3.dump
   REPO:  https://github.com/ioworker0/calico
   TAG: v3.27.3.dump
-  IMAGE: typha
+  CIMAGE: typha
+  DIMAGE: typha
 
   # pod2daemon: calico/node-driver-registrar:latest
   # node: calico/node:latest
@@ -17,7 +18,7 @@ env:
   # apiserver: calico/apiserver:latest
   # kube-controllers: calico/kube-controllers:latest
   # app-policy: calico/dikastes:latest
-  # typha: 
+  # typha: calico/typha:latest
 
 jobs:
   build:
@@ -52,14 +53,14 @@ jobs:
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
 
-      - name: calico-${{ env.IMAGE }} build
+      - name: calico-${{ env.CIMAGE }} build
         run: |  
-          cd calico && make -C ${{ env.IMAGE }} image
+          cd calico && make -C ${{ env.CIMAGE }} image
 
-      # - name: push calico-${{ env.IMAGE }}
-      #   run: |  
-      #     docker tag calico/${{ env.IMAGE }}:latest ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.IMAGE }}:${{ env.TAG }}
-      #     docker push ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.IMAGE }}:${{ env.TAG }}
+      - name: push calico-${{ env.CIMAGE }}
+        run: |  
+          docker tag calico/${{ env.DIMAGE }}:latest ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }}
 
       - name: done
         run: |  
@@ -68,6 +69,6 @@ jobs:
            -d "{
                  \"msgtype\": \"text\",
                  \"text\": {
-                   \"content\": \"calico-${{ env.IMAGE }} 已经编译完成 (分支: ${{ env.BRANCH }}, 标签: ${{ env.TAG }})\"
+                   \"content\": \"calico-${{ env.CIMAGE }} 已经编译完成 (分支: ${{ env.BRANCH }}, 标签: ${{ env.TAG }})\"
                  }
                }"
