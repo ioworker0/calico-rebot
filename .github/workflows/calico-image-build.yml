@@ -8,7 +8,7 @@ env:
   BRANCH: v3.27.3.dump
   REPO:  https://github.com/ioworker0/calico
   TAG: v3.27.3.dump
-  IMAGE: app-policy
+  IMAGE: typha
 
   # pod2daemon: calico/node-driver-registrar:latest
   # node: calico/node:latest
@@ -16,7 +16,8 @@ env:
   # cni-plugin: calico/cni:latest
   # apiserver: calico/apiserver:latest
   # kube-controllers: calico/kube-controllers:latest
-  # app-policy:
+  # app-policy: calico/dikastes:latest
+  # typha: 
 
 jobs:
   build:
