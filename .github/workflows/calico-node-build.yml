@@ -1,10 +1,8 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CALICO-BUILD
+name: CALICO-NODE-BUILD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "calico-node" ]
 
 env:
   BRANCH: v3.27.3.dump
@@ -30,7 +28,7 @@ jobs:
         run: |      
           uname -r && uname -m && echo $(nproc) && free -h && docker -v
 
-      - name: Login to Docker Hub
+      - name: login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -45,6 +43,10 @@ jobs:
           cd calico && git pull && git checkout ${{ env.BRANCH }}
 
       - name: calico-node build
+        run: |  
+          cd calico && make -C node image
+
+      - name: push calico-node
         run: |  
           cd calico && make -C node image
           docker tag calico/node:latest ${{ secrets.DOCKER_USERNAME }}/calico-node:${{ env.TAG }}
