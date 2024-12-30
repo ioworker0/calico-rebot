@@ -7,9 +7,9 @@ on:
 env:
   BRANCH: v3.27.3.dump
   REPO:  https://github.com/ioworker0/calico
-  TAG: v3.27.3.dump
-  CIMAGE: typha
-  DIMAGE: typha
+  TAG: v3.27.3.dump.flag
+  CIMAGE: node
+  DIMAGE: node
 
   # pod2daemon: calico/node-driver-registrar:latest
   # node: calico/node:latest
