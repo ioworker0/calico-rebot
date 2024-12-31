@@ -55,7 +55,7 @@ jobs:
 
       - name: calico-${{ env.CIMAGE }} build
         run: |  
-          cd calico/node && GIT_VERSION=v3.27.3 make build
+          cd calico/node && make build
 
       - name: push calico-${{ env.CIMAGE }}
         run: |  
