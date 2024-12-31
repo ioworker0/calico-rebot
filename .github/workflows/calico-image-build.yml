@@ -5,9 +5,9 @@ on:
     branches: [ "main" ]
 
 env:
-  BRANCH: v3.27.3.dump
+  BRANCH: v3.27.3.dump.native
   REPO:  https://github.com/ioworker0/calico
-  TAG: v3.27.3.dump.flag
+  TAG: v3.27.3.dump.native
   CIMAGE: node
   DIMAGE: node
 
