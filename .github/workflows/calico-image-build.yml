@@ -5,9 +5,9 @@ on:
     branches: [ "main" ]
 
 env:
-  BRANCH: v3.27.3.dump
+  BRANCH: v3.27.3.dump.native
   REPO:  https://github.com/ioworker0/calico
-  TAG: v3.27.3.dump.flag
+  TAG: v3.27.3.dump.native
   CIMAGE: node
   DIMAGE: node
 
@@ -52,6 +52,7 @@ jobs:
       - name: pull branch
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
+          git describe --tags --dirty --always --abbrev=12
 
       - name: calico-${{ env.CIMAGE }} build
         run: |  
