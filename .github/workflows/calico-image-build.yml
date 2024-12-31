@@ -55,7 +55,7 @@ jobs:
 
       - name: calico-${{ env.CIMAGE }} build
         run: |  
-          cd calico/node && make build
+          cd calico && make image
 
       - name: push calico-${{ env.CIMAGE }}
         run: |  
