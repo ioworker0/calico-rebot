@@ -7,7 +7,7 @@ on:
 env:
   BRANCH: v3.27.3.dump.native
   REPO:  https://github.com/ioworker0/calico
-  TAG: v3.27.3.dump.native.2
+  TAG: v3.27.3.dump.native.3
   CIMAGE: node
   DIMAGE: node
 
