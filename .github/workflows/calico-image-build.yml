@@ -5,11 +5,14 @@ on:
     branches: [ "main" ]
 
 env:
-  BRANCH: v3.27.3.dump.native
   REPO:  https://github.com/ioworker0/calico
-  TAG: v3.27.3.dump.native.4
-  CIMAGE: node
-  DIMAGE: node
+  BRANCH: v3.27.3-tc-base
+  TAG: v3.27.3-tc-base
+  CIMAGE: node # C -> calico
+  DIMAGE: node # d -> dockerhub
+  TIMAGE: node-tc # t -> tc
+  BASE_IMAGE: ${{ secrets.DOCKER_USERNAME }}/calico-node:v3.27.3-tclx-1
+  GIT_VERSION: v3.27.3
 
   # pod2daemon: calico/node-driver-registrar:latest
   # node: calico/node:latest
@@ -44,6 +47,13 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: push base image
+        run: |
+          docker pull ccr.ccs.tencentyun.com/qiaozhi/qiaozhi:v3.27.3-tclx-1
+          docker tag ccr.ccs.tencentyun.com/qiaozhi/qiaozhi:v3.27.3-tclx-1 qiaozhi1994/calico-node:v3.27.3-tclx-1
+          docker push qiaozhi1994/calico-node:v3.27.3-tclx-1
+          exit 1
           
       - name: clone repo
         run: |
@@ -52,16 +62,32 @@ jobs:
       - name: pull branch
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
-          git describe --tags --dirty --always --abbrev=12
 
       - name: calico-${{ env.CIMAGE }} build
+        env:
+          GIT_VERSION: ${{ env.GIT_VERSION }}
         run: |  
-          cd calico/node && make build
-
+          cd calico && make -c ${{ env.CIMAGE }} image 
+      
       - name: push calico-${{ env.CIMAGE }}
         run: |  
           docker tag calico/${{ env.DIMAGE }}:latest ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }}
           docker push ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }}
+
+      - name: calico-${{ env.TIMAGE }} build
+        run: |  
+          mkdir rebuild && cp calico/Dockerfile.${{ env.CIMAGE }} rebuild/
+          cd rebuild
+          docker build \
+          --rm --no-cache \
+          --build-arg NEW_IMAGE=${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }} \
+          --build-arg BASE_IMAGE=${{ env.BASE_IMAGE }} \
+          --build-arg VERSION=${{ env.GIT_VERSION }} \
+          -t ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.TIMAGE }}:${{ env.TAG }} .
+
+      - name: push calico-${{ env.TIMAGE }}
+        run: |
+         docker push ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.TIMAGE }}:${{ env.TAG }}
 
       - name: done
         run: |  
@@ -70,6 +96,6 @@ jobs:
            -d "{
                  \"msgtype\": \"text\",
                  \"text\": {
-                   \"content\": \"calico-${{ env.CIMAGE }} 已经编译完成 (分支: ${{ env.BRANCH }}, 标签: ${{ env.TAG }}), docker pull ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }}\"
+                   \"content\": \"calico-${{ env.TIMAGE }} 已经编译完成 (分支: ${{ env.BRANCH }}, 标签: ${{ env.TAG }}), docker pull ${{ secrets.DOCKER_USERNAME }}/calico-${{ env.TIMAGE }}:${{ env.TAG }}\"
                  }
                }"
