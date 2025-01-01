@@ -7,7 +7,7 @@ on:
 env:
   BRANCH: v3.27.3.dump.native
   REPO:  https://github.com/ioworker0/calico
-  TAG: v3.27.3.dump.native.3
+  TAG: v3.27.3.dump.native.4
   CIMAGE: node
   DIMAGE: node
 
@@ -56,8 +56,7 @@ jobs:
 
       - name: calico-${{ env.CIMAGE }} build
         run: |  
-          cd calico/node && make filesystem/etc/calico/confd/conf.d
-          make build 
+          cd calico/node && make build
 
       - name: push calico-${{ env.CIMAGE }}
         run: |  
