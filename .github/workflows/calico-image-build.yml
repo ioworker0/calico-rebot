@@ -59,8 +59,7 @@ jobs:
       - name: calico-${{ env.TIMAGE }} build
         run: |  
           mkdir rebuild && cp calico/Dockerfile.${{ env.CIMAGE }} rebuild/
-          cd rebuild
-          docker build \
+          cd rebuild && docker build \
           --rm --no-cache \
           --build-arg NEW_IMAGE=${{ secrets.DOCKER_USERNAME }}/calico-${{ env.DIMAGE }}:${{ env.TAG }} \
           --build-arg BASE_IMAGE=${{ env.BASE_IMAGE }} \
