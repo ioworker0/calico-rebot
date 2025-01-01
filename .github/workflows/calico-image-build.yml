@@ -60,7 +60,7 @@ jobs:
         env:
           GIT_VERSION: ${{ env.GIT_VERSION }}
         run: |  
-          cd calico && make -c ${{ env.CIMAGE }} image 
+          cd calico && make -C ${{ env.CIMAGE }} image 
       
       - name: push calico-${{ env.CIMAGE }}
         run: |  
