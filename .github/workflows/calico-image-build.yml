@@ -57,7 +57,7 @@ jobs:
       - name: calico-${{ env.CIMAGE }} build
         run: |  
           cd calico/node && make filesystem/etc/calico/confd/conf.d
-          cd .. && make -C ${{ env.CIMAGE }} image
+          make build
 
       - name: push calico-${{ env.CIMAGE }}
         run: |  
