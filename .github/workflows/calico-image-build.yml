@@ -47,13 +47,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: push base image
-        run: |
-          docker pull ccr.ccs.tencentyun.com/qiaozhi/qiaozhi:v3.27.3-tclx-1
-          docker tag ccr.ccs.tencentyun.com/qiaozhi/qiaozhi:v3.27.3-tclx-1 qiaozhi1994/calico-node:v3.27.3-tclx-1
-          docker push qiaozhi1994/calico-node:v3.27.3-tclx-1
-          exit 1
           
       - name: clone repo
         run: |
