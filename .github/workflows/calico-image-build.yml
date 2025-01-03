@@ -6,7 +6,7 @@ on:
 
 env:
   REPO:  https://github.com/ioworker0/calico
-  BRANCH: v3.27.3-tc-base
+  BRANCH: master
   TAG: v3.27.3-tc-base
   CIMAGE: node # C -> calico
   DIMAGE: node # d -> dockerhub
@@ -55,6 +55,11 @@ jobs:
       - name: pull branch
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
+
+      - name: make ci-preflight-checks
+        run: |
+          cd calico && make ci-preflight-checks
+          exit 1
 
       - name: calico-${{ env.CIMAGE }} build
         env:
