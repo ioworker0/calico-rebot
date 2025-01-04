@@ -6,7 +6,7 @@ on:
 
 env:
   REPO:  https://github.com/ioworker0/calico
-  BRANCH: feat-github-master
+  BRANCH: master
   TAG: v3.27.3-tc-base
   CIMAGE: node # C -> calico
   DIMAGE: node # d -> dockerhub
