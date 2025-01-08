@@ -56,11 +56,6 @@ jobs:
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
 
-      - name: make ci-preflight-checks
-        run: |
-          cd calico && make ci-preflight-checks
-          exit 1
-
       - name: calico-${{ env.CIMAGE }} build
         env:
           GIT_VERSION: ${{ env.GIT_VERSION }}
