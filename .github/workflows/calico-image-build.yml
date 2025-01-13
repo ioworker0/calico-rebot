@@ -6,8 +6,8 @@ on:
 
 env:
   REPO:  https://github.com/ioworker0/calico
-  BRANCH: v3.27.3-tc-base
-  TAG: v3.27.3-tc-base
+  BRANCH: master
+  TAG: latest-auto-conntrack-map-size
   CIMAGE: node # C -> calico
   DIMAGE: node # d -> dockerhub
   TIMAGE: node-tc # t -> tc
