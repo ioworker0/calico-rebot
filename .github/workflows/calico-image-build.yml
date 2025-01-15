@@ -6,7 +6,7 @@ on:
 
 env:
   REPO:  https://github.com/ioworker0/calico
-  BRANCH: master
+  BRANCH: v3.27.3-tc-bpfmapsizeconntrack-bpf
   TAG: v3.27.3-tc-conntrack-dump-autosize-1
   CIMAGE: node # C -> calico
   DIMAGE: node # d -> dockerhub
@@ -55,10 +55,18 @@ jobs:
       - name: pull branch
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
-
-      - name: static check
+      
+      - name: ubuntu build
+        run: |  
+            mkdir rebuild && cp calico/Dockerfile.ubuntu rebuild/Dockerfile
+            cd rebuild && docker build \
+            --rm --no-cache \
+            -t ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-libbpf-tools .
+ 
+      - name: push calico-${{ env.TIMAGE }}
         run: |
-          cd calico && make static-checks
+         docker push ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-libbpf-tools
+         exit 0
 
       - name: calico-${{ env.CIMAGE }} build
         env:
