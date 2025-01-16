@@ -61,7 +61,7 @@ jobs:
             mkdir rebuild && cp calico/Dockerfile.ubuntu rebuild/Dockerfile
             cd rebuild && docker build \
             --rm --no-cache \
-            -t ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-libbpf-tools .
+            -t ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-base .
  
       - name: push calico-${{ env.TIMAGE }}
         run: |
