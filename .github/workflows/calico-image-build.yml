@@ -65,7 +65,7 @@ jobs:
  
       - name: push calico-${{ env.TIMAGE }}
         run: |
-         docker push ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-libbpf-tools
+         docker push ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-base
          exit 1
 
       - name: calico-${{ env.CIMAGE }} build
