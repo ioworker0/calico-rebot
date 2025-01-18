@@ -6,7 +6,7 @@ on:
 
 env:
   REPO:  https://github.com/ioworker0/calico
-  BRANCH: v3.27.3-tc-bpfmapsizeconntrack-bpf
+  BRANCH: master
   TAG: v3.27.3-tc-conntrack-dump-autosize-1
   CIMAGE: node # C -> calico
   DIMAGE: node # d -> dockerhub
@@ -56,16 +56,22 @@ jobs:
         run: |
           cd calico && git pull && git checkout ${{ env.BRANCH }}
       
-      - name: ubuntu build
-        run: |  
-            mkdir rebuild && cp calico/Dockerfile.ubuntu rebuild/Dockerfile
-            cd rebuild && docker build \
-            --rm --no-cache \
-            -t ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-base .
+      # - name: ubuntu build
+      #   run: |  
+      #       mkdir rebuild && cp calico/Dockerfile.ubuntu rebuild/Dockerfile
+      #       cd rebuild && docker build \
+      #       --rm --no-cache \
+      #       -t ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-base .
  
-      - name: push calico-${{ env.TIMAGE }}
+      # - name: push calico-${{ env.TIMAGE }}
+      #   run: |
+      #    docker push ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-base
+      #    exit 1
+
+      - name: make fv-bpf
         run: |
-         docker push ${{ secrets.DOCKER_USERNAME }}/ubuntu:24.04-base
+         cd calico/felix && \
+         make fv-bpf GINKGO_FOCUS="Felix bpf test conntrack map upgrade.*should upgrade conntrack entries from v2 to v3" 2>&1 | tee fv.log
          exit 1
 
       - name: calico-${{ env.CIMAGE }} build
