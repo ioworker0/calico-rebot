@@ -6,7 +6,7 @@ on:
 
 env:
   REPO:  https://github.com/ioworker0/calico
-  BRANCH: feat-track-conntrack-map-in-userspace
+  BRANCH: feat-track-conntrack-map-in-userspace-II
   TAG: v3.27.3-tc-conntrack-dump-autosize-1
   CIMAGE: node # C -> calico
   DIMAGE: node # d -> dockerhub
