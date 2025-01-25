@@ -7,7 +7,8 @@ on:
 env:
   REPO:  https://github.com/ioworker0/calico
   BRANCH: feat-track-conntrack-map-in-userspace-II
-  TAG: v3.27.3-tc-conntrack-dump-autosize-1
+  TAG: feat-track-conntrack-map-in-userspace-II
+  # TAG: v3.27.3-tc-conntrack-dump-autosize-1
   CIMAGE: node # C -> calico
   DIMAGE: node # d -> dockerhub
   TIMAGE: node-tc # t -> tc
@@ -85,13 +86,6 @@ jobs:
          cd calico/felix && \
          make fv-bpf GINKGO_FOCUS="Felix bpf test conntrack map upgrade.*should upgrade conntrack entries from v2 to v3" 2>&1 | tee fv.log
          echo "All tests passed!"
-
-      - name: make fv-bpf2
-        run: |
-         cd calico/felix && \
-         make fv-bpf 2>&1 | tee fv.log
-         echo "All tests passed!"
-         exit 1
 
       - name: calico-${{ env.CIMAGE }} build
         env:
