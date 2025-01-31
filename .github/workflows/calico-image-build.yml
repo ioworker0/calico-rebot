@@ -90,7 +90,7 @@ jobs:
          echo "All tests passed!!!"
          cd .. && make static-checks
          echo "All tests passed!!!!"
-         exit 1
+         exit 2
 
       - name: calico-${{ env.CIMAGE }} build
         env:
