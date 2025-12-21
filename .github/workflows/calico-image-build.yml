@@ -1,8 +1,7 @@
 name: CALICO-IMAGE-BUILD
 
 on:
-  push:
-    branches: [ "main111" ] # 暂时关闭
+  workflow_dispatch:
 
 env:
   REPO:  https://github.com/ioworker0/calico
