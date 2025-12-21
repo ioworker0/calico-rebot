@@ -1,0 +1,82 @@
+name: PLUX-BASE-IMAGE-BUILD
+
+on:
+  workflow_dispatch:
+
+env:
+  # Docker Hub 用户名从 secrets 中获取
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  TAG: plux-base-2025-12-21
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Dockerhub
+
+    permissions:
+      contents: read # 大部分步骤只需要读权限
+
+    steps:
+      - name: Display System Resources
+        run: |
+          echo "Kernel: $(uname -r)"
+          echo "Architecture: $(uname -m)"
+          echo "CPUs: $(nproc)"
+          echo "Memory:" && free -h
+          echo "Docker Version:" && docker -v
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Image
+        run: |
+          # 使用 Here Document 创建一个临时的 Dockerfile
+          cat > Dockerfile.tc <<EOF
+          # Step 1: 从一个干净、官方的 Debian 12 镜像开始，以确保稳定性
+          FROM ubuntu:25.04
+
+      
+          # Step 3: 安装所有编译和调试 eBPF 程序所需的依赖
+          RUN apt-get update &&  \
+          		apt-get install -y tzdata curl iputils-ping \
+              && apt-get clean \
+              && rm -rf /var/lib/apt/lists/* \
+              && rm -rf /etc/apt/sources.list.d/
+
+          # 可以选择性地覆盖或设置新的入口点
+          WORKDIR /
+          CMD ["/bin/bash"]
+          EOF
+
+          # 使用这个临时的 Dockerfile 进行构建
+          docker build \
+            --rm --no-cache \
+            -f Dockerfile.tc \
+            -t ${{ env.DOCKER_USERNAME }}/nettrace-build:${{ env.TAG }} .
+
+          # 推送最终的镜像
+          docker push ${{ env.DOCKER_USERNAME }}/nettrace-build:${{ env.TAG }}
+
+      - name: Send Completion Notification
+        if: always() # 确保无论前面的步骤是否成功，都会发送通知
+        run: |
+          # 根据上一步的成功与否设置消息内容
+          if [ "${{ job.status }}" == "success" ]; then
+            MSG_CONTENT="✅  镜像构建成功, docker pull ${{ env.DOCKER_USERNAME }}/nettrace-build:${{ env.TAG }}"
+          else
+            MSG_CONTENT="❌ 镜像构建失败. 请检查 GitHub Actions 日志。"
+          fi
+
+          curl -X POST https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=73213bb8-b3eb-43f0-9493-7218b5f2eca6 \
+           -H 'Content-Type: application/json' \
+           -d "{
+                 \"msgtype\": \"text\",
+                 \"text\": {
+                   \"content\": \"${MSG_CONTENT}\"
+                 }
+               }"
