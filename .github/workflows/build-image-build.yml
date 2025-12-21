@@ -1,8 +1,7 @@
 name: BUILD-IMAGE-BUILD
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 env:
   # Docker Hub 用户名从 secrets 中获取
