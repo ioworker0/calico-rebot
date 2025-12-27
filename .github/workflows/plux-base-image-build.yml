@@ -6,7 +6,7 @@ on:
 env:
   # Docker Hub 用户名从 secrets 中获取
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  TAG: plux-base-2025-12-27-perf
+  TAG: plux-base-2025-12-27
 
 jobs:
   build:
@@ -43,7 +43,7 @@ jobs:
       
           # Step 3: 安装所有编译和调试 eBPF 程序所需的依赖
           RUN apt-get update &&  \
-          		apt-get install -y tzdata curl iputils-ping libelf1 jq perf \
+          		apt-get install -y tzdata curl iputils-ping libelf1 jq vim \
               && apt-get clean \
               && rm -rf /var/lib/apt/lists/* \
               && rm -rf /etc/apt/sources.list.d/
