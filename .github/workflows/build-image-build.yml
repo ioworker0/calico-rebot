@@ -6,7 +6,7 @@ on:
 env:
   # Docker Hub 用户名从 secrets 中获取
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  TAG: build-25-07-26
+  TAG: build-26-02-11
 
 jobs:
   build:
@@ -60,6 +60,7 @@ jobs:
               libiberty-dev \
               libunwind-dev \
               libcap-dev \
+              libpcap-dev \
               libzstd-dev \
               libnuma-dev \
               libssl-dev \
