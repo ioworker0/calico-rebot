@@ -6,7 +6,7 @@ on:
 env:
   # Docker Hub 用户名从 secrets 中获取
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  TAG: build-26-02-11
+  TAG: build-26-03-03
 
 jobs:
   build:
@@ -80,6 +80,7 @@ jobs:
               xz-utils \
               bc \
               zstd \
+              vim crash \
               && apt clean \
               && rm -rf /var/lib/apt/lists/* \
               && rm -rf /etc/apt/sources.list.d/
